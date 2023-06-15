@@ -1,6 +1,6 @@
 {
   "name": "identify-package-manager",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Check the used package manager in a given repository (npm, pnpm, yarn classic, yarn berry)",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -43,16 +43,16 @@
   },
   "homepage": "https://github.com/maks-io/identify-package-manager#readme",
   "dependencies": {
-    "identify-monorepo-root": "^1.0.4",
+    "identify-monorepo-root": "^1.0.5",
     "minimist": "^1.2.8",
-    "who-am-i-now": "^1.0.5"
+    "who-am-i-now": "^1.0.7"
   },
   "devDependencies": {
-    "@types/node": "^20.1.5",
+    "@types/node": "^20.3.1",
     "nodemon": "^2.0.22",
     "prettier": "^2.8.8",
     "tsc": "^2.0.4",
     "tsc-alias": "^1.8.6",
-    "typescript": "^5.0.4"
+    "typescript": "^5.1.3"
   }
 }
