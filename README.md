@@ -86,16 +86,16 @@ yarn add identify-package-manager
 
 ### Usage
 
-```Typescript
-import { identifyPackageManager, PackageManagerName, PackageManagerInfo } from "identify-package-manager";
+```typescript
+import { identifyPackageManager } from "identify-package-manager";
 
 // get name of package manager:
-const packageManager: PackageManagerName = identifyPackageManager(true);
+const packageManager = identifyPackageManager(true);
 console.log(packageManager);
 // ^ might output 'yarn-berry' for instance
 
 // get entire info about package manager:
-const packageManagerInfo: PackageManagerInfo = identifyPackageManager();
+const packageManagerInfo = identifyPackageManager();
 console.log(packageManagerInfo);
 // ^ might output the following for instance:
 // {

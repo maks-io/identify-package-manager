@@ -4,9 +4,9 @@ import { identifyMonorepoRoot } from "identify-monorepo-root";
 import { PackageManagerInfo, PackageManagerName } from "./PackageManagerInfo";
 import { getDetailedVersionFromSimple } from "./getDetailedVersionFromSimple";
 
-export const identifyPackageManager = (
-  returnNameOnly: boolean
-): PackageManagerName | PackageManagerInfo => {
+export function identifyPackageManager(returnNameOnly?: false): PackageManagerInfo;
+export function identifyPackageManager(returnNameOnly: true): PackageManagerName;
+export function identifyPackageManager(returnNameOnly?: boolean) {
   const who = whoAmINow();
 
   if (!who.isServerApp) {
