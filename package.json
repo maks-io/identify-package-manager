@@ -43,16 +43,16 @@
   },
   "homepage": "https://github.com/maks-io/identify-package-manager#readme",
   "dependencies": {
-    "identify-monorepo-root": "^1.0.5",
+    "identify-monorepo-root": "^1.0.7",
     "minimist": "^1.2.8",
-    "who-am-i-now": "^1.0.7"
+    "who-am-i-now": "^2.1.0"
   },
   "devDependencies": {
-    "@types/node": "^20.3.1",
-    "nodemon": "^2.0.22",
-    "prettier": "^2.8.8",
+    "@types/node": "^20.12.3",
+    "nodemon": "^3.1.0",
+    "prettier": "^3.2.5",
     "tsc": "^2.0.4",
-    "tsc-alias": "^1.8.6",
-    "typescript": "^5.1.3"
+    "tsc-alias": "^1.8.8",
+    "typescript": "^5.4.3"
   }
 }
