@@ -7,7 +7,7 @@ Check the used package manager in a given repository ([npm](https://www.npmjs.co
 ## Highlights
 
 - can be used as **classical dependency** or as **cli/command line tool**
-- cli tool can be run in the root of a repository as well as any subfolder (also inside monorepo sub "workspaces" for example) - [it will detect the monorepo's root automatically](https://www.npmjs.com/package/identify-package-manager).
+- cli tool can be run in the root of a repository as well as any subfolder (also inside monorepo sub "workspaces" for example) - [it will detect the monorepo's root automatically](https://www.npmjs.com/package/identify-monorepo-root).
 - written in Typescript
 
 ## CLI
