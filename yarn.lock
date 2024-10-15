@@ -23,12 +23,12 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@types/node@^20.12.3":
-  version "20.12.3"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.12.3.tgz#d6658c2c7776c1cad93534bb45428195ed840c65"
-  integrity sha512-sD+ia2ubTeWrOu+YMF+MTAB7E+O7qsMqAbMfW7DG3K1URwhZ5hN1pLlRVGbf4wDFzSfikL05M17EyorS86jShw==
+"@types/node@^22.7.5":
+  version "22.7.5"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-22.7.5.tgz#cfde981727a7ab3611a481510b473ae54442b92b"
+  integrity sha512-jML7s2NAzMWc//QSJ1a3prpk78cOPchGvXJsC3C6R6PSMoooztvRVQEz89gmBTBY1SPMaqo5teB4uNHPdetShQ==
   dependencies:
-    undici-types "~5.26.4"
+    undici-types "~6.19.2"
 
 abbrev@1:
   version "1.1.1"
@@ -171,13 +171,13 @@ has-flag@^3.0.0:
   resolved "https://registry.yarnpkg.com/has-flag/-/has-flag-3.0.0.tgz#b5d454dc2199ae225699f3467e5a07f3b955bafd"
   integrity sha512-sKJf1+ceQBr4SMkvQnBDNDtf4TXpVhVGateu0t918bl30FnbE2m4vNLX+VWe/dpjlb+HugGYzW7uQXH98HPEYw==
 
-identify-monorepo-root@^1.0.7:
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/identify-monorepo-root/-/identify-monorepo-root-1.0.7.tgz#ee9f1bd3e8e205f535a8d7b75aee99673fa2d78f"
-  integrity sha512-ms86GPge1PiETxMz4NDB6AHIK1GwHaexcL7O1jLFkXHN/XcsD8qa0M44viZ3FBk0hIecZ3uirv3UaDwbW0N5Zw==
+identify-monorepo-root@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/identify-monorepo-root/-/identify-monorepo-root-1.0.8.tgz#3b6deaf4ff34def6430b9b0b0348af8d68b331b8"
+  integrity sha512-ZMHNuriB468L0zvyeC2tTN7V7sN3ZqdMuWr2EySV1BJaBz4S/s0tCoDF2HfCLHRtsWTax+gzWemIZ7TxA/sA+w==
   dependencies:
     minimist "^1.2.8"
-    who-am-i-now "^2.1.0"
+    who-am-i-now "^2.1.1"
 
 ignore-by-default@^1.0.1:
   version "1.0.1"
@@ -262,10 +262,10 @@ mylas@^2.1.9:
   resolved "https://registry.yarnpkg.com/mylas/-/mylas-2.1.13.tgz#1e23b37d58fdcc76e15d8a5ed23f9ae9fc0cbdf4"
   integrity sha512-+MrqnJRtxdF+xngFfUUkIMQrUUL0KsxbADUkn23Z/4ibGg192Q+z+CQyiYwvWTsYjJygmMR8+w3ZDa98Zh6ESg==
 
-nodemon@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/nodemon/-/nodemon-3.1.0.tgz#ff7394f2450eb6a5e96fe4180acd5176b29799c9"
-  integrity sha512-xqlktYlDMCepBJd43ZQhjWwMw2obW/JRvkrLxq5RCNcuDDX1DbcPT+qT1IlIIdf+DhnWs90JpTMe+Y5KxOchvA==
+nodemon@^3.1.7:
+  version "3.1.7"
+  resolved "https://registry.yarnpkg.com/nodemon/-/nodemon-3.1.7.tgz#07cb1f455f8bece6a499e0d72b5e029485521a54"
+  integrity sha512-hLj7fuMow6f0lbB0cD14Lz2xNjwsyruH251Pk4t/yIitCFJbmY1myuLlHm/q06aST4jg6EgAh74PIBBrRqpVAQ==
   dependencies:
     chokidar "^3.5.2"
     debug "^4"
@@ -307,10 +307,10 @@ plimit-lit@^1.2.6:
   dependencies:
     queue-lit "^1.5.0"
 
-prettier@^3.2.5:
-  version "3.2.5"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.2.5.tgz#e52bc3090586e824964a8813b09aba6233b28368"
-  integrity sha512-3/GWa9aOC0YeD7LUfvOG2NiDyhOWRvt1k+rcKhOuYnMY24iiCphgneUfJDyFXd6rZCAnuLBv6UeAULtrhT/F4A==
+prettier@^3.3.3:
+  version "3.3.3"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.3.3.tgz#30c54fe0be0d8d12e6ae61dbb10109ea00d53105"
+  integrity sha512-i2tDNA0O5IrMO757lfrdQZCc2jPNDVntV0m/+4whiDfWaTKfMNgR7Qz0NAeGz/nRqF4m5/6CLzbP4/liHt12Ew==
 
 pstree.remy@^1.1.8:
   version "1.1.8"
@@ -393,10 +393,10 @@ touch@^3.1.0:
   dependencies:
     nopt "~1.0.10"
 
-tsc-alias@^1.8.8:
-  version "1.8.8"
-  resolved "https://registry.yarnpkg.com/tsc-alias/-/tsc-alias-1.8.8.tgz#48696af442b7656dd7905e37ae0bc332d80be3fe"
-  integrity sha512-OYUOd2wl0H858NvABWr/BoSKNERw3N9GTi3rHPK8Iv4O1UyUXIrTTOAZNHsjlVpXFOhpJBVARI1s+rzwLivN3Q==
+tsc-alias@^1.8.10:
+  version "1.8.10"
+  resolved "https://registry.yarnpkg.com/tsc-alias/-/tsc-alias-1.8.10.tgz#279f9bf0dd8bc10fb27820393d4881db5a303938"
+  integrity sha512-Ibv4KAWfFkFdKJxnWfVtdOmB0Zi1RJVxcbPGiCDsFpCQSsmpWyuzHG3rQyI5YkobWwxFPEyQfu1hdo4qLG2zPw==
   dependencies:
     chokidar "^3.5.3"
     commander "^9.0.0"
@@ -410,10 +410,10 @@ tsc@^2.0.4:
   resolved "https://registry.yarnpkg.com/tsc/-/tsc-2.0.4.tgz#5f6499146abea5dca4420b451fa4f2f9345238f5"
   integrity sha512-fzoSieZI5KKJVBYGvwbVZs/J5za84f2lSTLPYf6AGiIf43tZ3GNrI1QzTLcjtyDDP4aLxd46RTZq1nQxe7+k5Q==
 
-typescript@^5.4.3:
-  version "5.4.3"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.4.3.tgz#5c6fedd4c87bee01cd7a528a30145521f8e0feff"
-  integrity sha512-KrPd3PKaCLr78MalgiwJnA25Nm8HAmdwN3mYUYZgG/wizIo9EainNVQI9/yDavtVFRN2h3k8uf3GLHuhDMgEHg==
+typescript@^5.6.3:
+  version "5.6.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.6.3.tgz#5f3449e31c9d94febb17de03cc081dd56d81db5b"
+  integrity sha512-hjcS1mhfuyi4WW8IWtjP7brDrG2cuDZukyrYrSauoXGNgx0S7zceP07adYkJycEr56BOUTNPzbInooiN3fn1qw==
 
 ua-parser-js@^1.0.33:
   version "1.0.35"
@@ -425,15 +425,15 @@ undefsafe@^2.0.5:
   resolved "https://registry.yarnpkg.com/undefsafe/-/undefsafe-2.0.5.tgz#38733b9327bdcd226db889fb723a6efd162e6e2c"
   integrity sha512-WxONCrssBM8TSPRqN5EmsjVrsv4A8X12J4ArBiiayv3DyyG3ZlIg6yysuuSYdZsVz3TKcTg2fd//Ujd4CHV1iA==
 
-undici-types@~5.26.4:
-  version "5.26.5"
-  resolved "https://registry.yarnpkg.com/undici-types/-/undici-types-5.26.5.tgz#bcd539893d00b56e964fd2657a4866b221a65617"
-  integrity sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==
+undici-types@~6.19.2:
+  version "6.19.8"
+  resolved "https://registry.yarnpkg.com/undici-types/-/undici-types-6.19.8.tgz#35111c9d1437ab83a7cdc0abae2f26d88eda0a02"
+  integrity sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw==
 
-who-am-i-now@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/who-am-i-now/-/who-am-i-now-2.1.0.tgz#0b7001b75865b99cd8cb6c6f1e98ea5f259d997f"
-  integrity sha512-PDdwilhVmHJJeQ6OxU33854LG6YsXwI3PgD0i1DyT4v8IMzGugePdWIHk2YNXDZ9ChcwCPdU07DoYlSjMmNDAQ==
+who-am-i-now@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/who-am-i-now/-/who-am-i-now-2.1.1.tgz#37c2cf5f76a2acc138f03785e29037648713c12f"
+  integrity sha512-fLodpsPR/HzySJ5z40g0F8EYtcDULLS2xQHzQ3J/OT+zdqatOCxSXeufsceWqLmMzi02Dpk8j28T5A8Z7Jl3Dw==
   dependencies:
     is-ci "^3.0.1"
     react-device-detect "^2.2.3"
