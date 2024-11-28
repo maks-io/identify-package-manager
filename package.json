@@ -1,6 +1,6 @@
 {
   "name": "identify-package-manager",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Check the used package manager in a given repository (npm, pnpm, yarn classic, yarn berry)",
   "main": "build/index.js",
   "types": "build/index.d.ts",
