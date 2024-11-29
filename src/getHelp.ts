@@ -3,7 +3,7 @@ export const getHelp = (inclHeader = false) => {
   if (inclHeader) {
     help += "Identify Package Manager\n";
     help +=
-      "A tool to check the used package manager in a given repository (npm, pnpm, yarn classic, yarn berry)\n";
+      "A tool to check the used package manager in a given repository (npm, yarn classic, yarn berry, pnpm, bun)\n";
   }
   help += "\n";
   help += "Usage:\n";

@@ -2,7 +2,7 @@
 
 [![Version](https://img.shields.io/npm/v/identify-package-manager)](https://www.npmjs.com/package/identify-package-manager)
 
-Check the used package manager in a given repository ([npm](https://www.npmjs.com/), [pnpm](https://pnpm.io/), [yarn classic](https://classic.yarnpkg.com), [yarn berry](https://yarnpkg.com)).
+Check the used package manager in a given repository ([npm](https://www.npmjs.com/), [yarn classic](https://classic.yarnpkg.com), [yarn berry](https://yarnpkg.com), [pnpm](https://pnpm.io/), [bun](https://https://bun.sh/)).
 
 ## Highlights
 
@@ -64,11 +64,11 @@ If you're only interested in the package manager's name, look at the `--nameonly
 
 #### CLI options
 
-| option              | explanation                                                                                                                      |
-| ------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `-h` / `--help`     | Display this package's help + usage info.                                                                                        |
-| `-v` / `--version`  | Display this package's version number.                                                                                           |
-| `-n` / `--nameonly` | If set, the cli tool will only return the used package manager's name (`npm`, `yarn-classic`, `yarn-berry`, `pnpm` or `unknown`) |
+| option              | explanation                                                                                                                             |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `-h` / `--help`     | Display this package's help + usage info.                                                                                               |
+| `-v` / `--version`  | Display this package's version number.                                                                                                  |
+| `-n` / `--nameonly` | If set, the cli tool will only return the used package manager's name (`npm`, `yarn-classic`, `yarn-berry`, `pnpm`, `bun` or `unknown`) |
 
 ## Classical dependency
 
@@ -109,5 +109,4 @@ console.log(packageManagerInfo);
 //         }
 //     }
 // }
-
 ```
