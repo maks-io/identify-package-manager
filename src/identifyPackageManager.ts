@@ -4,18 +4,22 @@ import { identifyMonorepoRoot } from "identify-monorepo-root";
 import { PackageManagerInfo, PackageManagerName } from "./PackageManagerInfo";
 import { getDetailedVersionFromSimple } from "./getDetailedVersionFromSimple";
 
-export function identifyPackageManager(returnNameOnly?: false): PackageManagerInfo;
-export function identifyPackageManager(returnNameOnly: true): PackageManagerName;
+export function identifyPackageManager(
+  returnNameOnly?: false,
+): PackageManagerInfo;
+export function identifyPackageManager(
+  returnNameOnly: true,
+): PackageManagerName;
 export function identifyPackageManager(returnNameOnly?: boolean) {
   const who = whoAmINow();
 
   if (!who.isServerApp) {
     throw new Error(
-      "Library 'identify-package-manager' can only be used server side."
+      "Library 'identify-package-manager' can only be used server side.",
     );
   }
 
-  let fs;
+  let fs: any;
   try {
     fs = require("fs");
   } catch (e) {
@@ -24,7 +28,7 @@ export function identifyPackageManager(returnNameOnly?: boolean) {
 
   const monorepoRoot = identifyMonorepoRoot();
 
-  const files = fs.readdirSync(monorepoRoot);
+  const files: string[] = fs.readdirSync(monorepoRoot);
   const packageJson = files.find((f) => f === "package.json");
 
   if (!packageJson) {
@@ -32,7 +36,7 @@ export function identifyPackageManager(returnNameOnly?: boolean) {
   }
 
   const packageJsonFile = JSON.parse(
-    fs.readFileSync(path.resolve(monorepoRoot, "package.json"), "utf-8")
+    fs.readFileSync(path.resolve(monorepoRoot, "package.json"), "utf-8"),
   );
 
   // package manager info might already be inside package.json directly:
@@ -40,7 +44,7 @@ export function identifyPackageManager(returnNameOnly?: boolean) {
     const [nameRaw, version] = packageJsonFile.packageManager.split("@");
     const versionDetailed = getDetailedVersionFromSimple(version);
 
-    let name;
+    let name: PackageManagerName;
     if (nameRaw === "yarn") {
       if (versionDetailed.major === 1) {
         name = "yarn-classic";
@@ -67,7 +71,7 @@ export function identifyPackageManager(returnNameOnly?: boolean) {
   // it might be yarn 'berry' (meaning every yarn version 2+):
   try {
     const yarnReleaseFiles = fs.readdirSync(
-      path.resolve(monorepoRoot, ".yarn", "releases")
+      path.resolve(monorepoRoot, ".yarn", "releases"),
     );
     if (yarnReleaseFiles?.length === 1) {
       const version = yarnReleaseFiles[0].split("-")[1].split(".")[0];
@@ -127,8 +131,18 @@ export function identifyPackageManager(returnNameOnly?: boolean) {
     return { name: "pnpm", version: undefined };
   }
 
+  // it might be bun:
+  const bunLockFile = files.find((f) => f === "bun.lockb");
+  if (bunLockFile) {
+    if (returnNameOnly) {
+      return "bun";
+    }
+    return { name: "bun", version: undefined };
+  }
+
+  // no package manager identified:
   if (returnNameOnly) {
     return "unknown";
   }
   return { name: "unknown", version: undefined };
-};
+}

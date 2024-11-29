@@ -3,6 +3,7 @@ export type PackageManagerName =
   | "yarn-classic"
   | "yarn-berry"
   | "pnpm"
+  | "bun"
   | "unknown";
 
 type NumberOrPlaceholder = number | "x";
