@@ -1,104 +1,104 @@
-import path from "path";
-import { whoAmINow } from "who-am-i-now";
+import * as fs from "node:fs";
+import * as path from "node:path";
 import { identifyMonorepoRoot } from "identify-monorepo-root";
-import { PackageManagerInfo, PackageManagerName } from "./PackageManagerInfo";
+import type {
+  PackageManagerInfo,
+  PackageManagerName,
+  SemanticVersion,
+} from "./PackageManagerInfo";
 import { getDetailedVersionFromSimple } from "./getDetailedVersionFromSimple";
 
-export function identifyPackageManager(
-  returnNameOnly?: false,
-): PackageManagerInfo;
-export function identifyPackageManager(
-  returnNameOnly: true,
-): PackageManagerName;
-export function identifyPackageManager(returnNameOnly?: boolean) {
-  const who = whoAmINow();
+type SupportedPackageManagerName = Exclude<PackageManagerName, "unknown">;
+type PackageJsonLike = {
+  packageManager?: string;
+};
 
-  if (!who.isServerApp) {
-    throw new Error(
-      "Library 'identify-package-manager' can only be used server side.",
-    );
+const PACKAGE_MANAGER_REGEX = /^(npm|yarn|pnpm|bun)@(\d+\.\d+\.\d+)/;
+const YARN_BERRY_RELEASE_REGEX = /^yarn-(\d+\.\d+\.\d+)(?:\.[^.]+)?$/;
+
+const getPackageManagerName = (
+  packageManager: SupportedPackageManagerName | "yarn",
+  version: SemanticVersion,
+): SupportedPackageManagerName => {
+  if (packageManager !== "yarn") {
+    return packageManager;
   }
 
-  let fs: any;
+  return getDetailedVersionFromSimple(version).major === 1
+    ? "yarn-classic"
+    : "yarn-berry";
+};
+
+const compareSemanticVersions = (
+  left: SemanticVersion,
+  right: SemanticVersion,
+): number => {
+  const leftDetailed = getDetailedVersionFromSimple(left);
+  const rightDetailed = getDetailedVersionFromSimple(right);
+
+  if (leftDetailed.major !== rightDetailed.major) {
+    return leftDetailed.major - rightDetailed.major;
+  }
+
+  if (leftDetailed.minor !== rightDetailed.minor) {
+    return (leftDetailed.minor ?? 0) - (rightDetailed.minor ?? 0);
+  }
+
+  return (leftDetailed.patch ?? 0) - (rightDetailed.patch ?? 0);
+};
+
+const createVersionedResult = (
+  packageManager: SupportedPackageManagerName | "yarn",
+  version: SemanticVersion,
+): PackageManagerInfo => ({
+  name: getPackageManagerName(packageManager, version),
+  version: {
+    simple: version,
+    detailed: getDetailedVersionFromSimple(version),
+  },
+});
+
+const parsePackageManagerField = (
+  packageManagerField?: string,
+): PackageManagerInfo | null => {
+  if (!packageManagerField) {
+    return null;
+  }
+
+  const match = packageManagerField.match(PACKAGE_MANAGER_REGEX);
+  if (!match) {
+    return null;
+  }
+
+  const [, packageManager, version] = match as [
+    string,
+    SupportedPackageManagerName | "yarn",
+    SemanticVersion,
+  ];
+
+  return createVersionedResult(packageManager, version);
+};
+
+const detectYarnBerryVersion = (
+  monorepoRoot: string,
+): SemanticVersion | null => {
   try {
-    fs = require("fs");
-  } catch (e) {
-    // do nothing
-  }
-
-  const monorepoRoot = identifyMonorepoRoot();
-
-  const files: string[] = fs.readdirSync(monorepoRoot);
-  const packageJson = files.find((f) => f === "package.json");
-
-  if (!packageJson) {
-    throw new Error(`No package.json file found in path ${monorepoRoot}`);
-  }
-
-  const packageJsonFile = JSON.parse(
-    fs.readFileSync(path.resolve(monorepoRoot, "package.json"), "utf-8"),
-  );
-
-  // package manager info might already be inside package.json directly:
-  if (packageJsonFile.packageManager) {
-    const [nameRaw, version] = packageJsonFile.packageManager.split("@");
-    const versionDetailed = getDetailedVersionFromSimple(version);
-
-    let name: PackageManagerName;
-    if (nameRaw === "yarn") {
-      if (versionDetailed.major === 1) {
-        name = "yarn-classic";
-      } else {
-        name = "yarn-berry";
-      }
-    } else {
-      name = nameRaw;
-    }
-
-    if (returnNameOnly) {
-      return name;
-    }
-
-    return {
-      name,
-      version: {
-        simple: version,
-        detailed: versionDetailed,
-      },
-    };
-  }
-
-  // it might be yarn 'berry' (meaning every yarn version 2+):
-  try {
-    const yarnReleaseFiles = fs.readdirSync(
-      path.resolve(monorepoRoot, ".yarn", "releases"),
+    const releaseFiles = fs.readdirSync(
+      path.join(monorepoRoot, ".yarn", "releases"),
     );
-    if (yarnReleaseFiles?.length === 1) {
-      const version = yarnReleaseFiles[0].split("-")[1].split(".")[0];
+    const versions = releaseFiles
+      .map((fileName) => fileName.match(YARN_BERRY_RELEASE_REGEX)?.[1])
+      .filter((version): version is SemanticVersion => version !== undefined)
+      .sort(compareSemanticVersions);
 
-      if (returnNameOnly) {
-        return "yarn-berry";
-      }
-
-      return {
-        name: "yarn-berry",
-        version: {
-          simple: version,
-          detailed: getDetailedVersionFromSimple(version),
-        },
-      };
-    }
-  } catch (e) {
-    // do nothing
+    return versions.length > 0 ? versions[versions.length - 1] : null;
+  } catch {
+    return null;
   }
+};
 
-  // it might be yarn 1 (legacy yarn):
-  const yarnLockFile = files.find((f) => f === "yarn.lock");
-  if (yarnLockFile) {
-    if (returnNameOnly) {
-      return "yarn-classic";
-    }
-
+const detectFromLockfiles = (files: Set<string>): PackageManagerInfo => {
+  if (files.has("yarn.lock")) {
     return {
       name: "yarn-classic",
       version: {
@@ -112,37 +112,64 @@ export function identifyPackageManager(returnNameOnly?: boolean) {
     };
   }
 
-  // it might be npm:
-  const npmLockFile = files.find((f) => f === "package-lock.json");
-  if (npmLockFile) {
-    if (returnNameOnly) {
-      return "npm";
-    }
-
+  if (files.has("package-lock.json") || files.has("npm-shrinkwrap.json")) {
     return { name: "npm", version: undefined };
   }
 
-  // it might be pnpm:
-  const pnpmLockFile = files.find((f) => f === "pnpm-lock.yaml");
-  if (pnpmLockFile) {
-    if (returnNameOnly) {
-      return "pnpm";
-    }
+  if (files.has("pnpm-lock.yaml")) {
     return { name: "pnpm", version: undefined };
   }
 
-  // it might be bun:
-  const bunLockFile = files.find((f) => f === "bun.lockb");
-  if (bunLockFile) {
-    if (returnNameOnly) {
-      return "bun";
-    }
+  if (files.has("bun.lock") || files.has("bun.lockb")) {
     return { name: "bun", version: undefined };
   }
 
-  // no package manager identified:
-  if (returnNameOnly) {
-    return "unknown";
-  }
   return { name: "unknown", version: undefined };
+};
+
+export function identifyPackageManager(
+  returnNameOnly?: false,
+  startingDirectory?: string,
+): PackageManagerInfo;
+export function identifyPackageManager(
+  returnNameOnly: true,
+  startingDirectory?: string,
+): PackageManagerName;
+export function identifyPackageManager(
+  returnNameOnly = false,
+  startingDirectory = process.cwd(),
+): PackageManagerInfo | PackageManagerName {
+  const monorepoRoot = identifyMonorepoRoot(startingDirectory);
+  if (!monorepoRoot) {
+    throw new Error(
+      `Could not determine a repository root from path ${startingDirectory}`,
+    );
+  }
+
+  const files = new Set(fs.readdirSync(monorepoRoot));
+  if (!files.has("package.json")) {
+    throw new Error(`No package.json file found in path ${monorepoRoot}`);
+  }
+
+  const packageJsonFile = JSON.parse(
+    fs.readFileSync(path.join(monorepoRoot, "package.json"), "utf-8"),
+  ) as PackageJsonLike;
+
+  const packageManagerFromPackageJson = parsePackageManagerField(
+    packageJsonFile.packageManager,
+  );
+  if (packageManagerFromPackageJson) {
+    return returnNameOnly
+      ? packageManagerFromPackageJson.name
+      : packageManagerFromPackageJson;
+  }
+
+  const yarnBerryVersion = detectYarnBerryVersion(monorepoRoot);
+  if (yarnBerryVersion) {
+    const result = createVersionedResult("yarn", yarnBerryVersion);
+    return returnNameOnly ? result.name : result;
+  }
+
+  const detectedFromLockfiles = detectFromLockfiles(files);
+  return returnNameOnly ? detectedFromLockfiles.name : detectedFromLockfiles;
 }

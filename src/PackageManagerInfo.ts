@@ -17,7 +17,7 @@ export type SemanticVersionDetails = {
   patch: number | undefined;
 };
 
-type PackageManagerVersion =
+export type PackageManagerVersion =
   | { simple: SemanticVersion; detailed: SemanticVersionDetails }
   | undefined;
 

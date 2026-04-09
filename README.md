@@ -2,111 +2,109 @@
 
 [![Version](https://img.shields.io/npm/v/identify-package-manager)](https://www.npmjs.com/package/identify-package-manager)
 
-Check the used package manager in a given repository ([npm](https://www.npmjs.com/), [yarn classic](https://classic.yarnpkg.com), [yarn berry](https://yarnpkg.com), [pnpm](https://pnpm.io/), [bun](https://https://bun.sh/)).
+Detect the package manager used by a repository from any nested directory.
 
-## Highlights
+The package works as a CLI and as a library. It inspects `packageManager` metadata when present and falls back to common lockfiles such as `package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`, `bun.lock`, and `bun.lockb`.
 
-- can be used as **classical dependency** or as **cli/command line tool**
-- cli tool can be run in the root of a repository as well as any subfolder (also inside monorepo sub "workspaces" for example) - [it will detect the monorepo's root automatically](https://www.npmjs.com/package/identify-monorepo-root).
-- written in Typescript
-
-## CLI
-
-### Global install
-
-Via npm:
+## Installation
 
 ```bash
-npm i -g identify-package-manager
+npm install identify-package-manager
 ```
 
-Via yarn:
+You can also run it without a global install:
 
 ```bash
-yarn global add identify-package-manager
+npx identify-package-manager
 ```
 
-### npx
+## CLI usage
 
-Instead of a global install you can also use it via `npx`:
+Run the command anywhere inside the repository you want to inspect:
 
 ```bash
-npx identify-package-manager [options]
+identify-package-manager [options] [directory]
 ```
 
-### Usage
+Without any flag, the CLI prints the package manager name plus version info when it can determine one:
 
-After installation you can use it by running the following command inside any given repository.
-
-```bash
-identify-package-manager [options]
-```
-
-If used without any option the tool will return info about both, the package manager's name and its version, if detectable.
-
-An example output would be the following:
-
-```
+```json
 {
-    "name": "yarn-berry",
-    "version": {
-        "simple": "2.0.1",
-        "detailed": {
-             "major": 2,
-             "minor": 0,
-             "patch": 1,
-        }
+  "name": "yarn-berry",
+  "version": {
+    "simple": "4.6.1",
+    "detailed": {
+      "major": 4,
+      "minor": 6,
+      "patch": 1
     }
+  }
 }
 ```
 
-If you're only interested in the package manager's name, look at the `--nameonly` option below:
+Use `--nameonly` if you only need the normalized package manager name.
 
-#### CLI options
+### CLI options
 
 | option              | explanation                                                                                                                             |
 | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
 | `-h` / `--help`     | Display this package's help + usage info.                                                                                               |
 | `-v` / `--version`  | Display this package's version number.                                                                                                  |
-| `-n` / `--nameonly` | If set, the cli tool will only return the used package manager's name (`npm`, `yarn-classic`, `yarn-berry`, `pnpm`, `bun` or `unknown`) |
+| `-n` / `--nameonly` | If set, the CLI only returns the package manager name (`npm`, `yarn-classic`, `yarn-berry`, `pnpm`, `bun`, or `unknown`).             |
 
-## Classical dependency
+## Library usage
 
-### Install
-
-```
-npm install --save identify-package-manager
-```
-
-Or if you use Yarn:
-
-```
-yarn add identify-package-manager
-```
-
-### Usage
-
-```typescript
+```ts
 import { identifyPackageManager } from "identify-package-manager";
 
-// get name of package manager:
-const packageManager = identifyPackageManager(true);
-console.log(packageManager);
-// ^ might output 'yarn-berry' for instance
-
-// get entire info about package manager:
 const packageManagerInfo = identifyPackageManager();
 console.log(packageManagerInfo);
-// ^ might output the following for instance:
-// {
-//     "name": "yarn-berry",
-//     "version": {
-//         "simple": "2.0.1",
-//         "detailed": {
-//              "major": 2,
-//              "minor": 0,
-//              "patch": 1,
-//         }
-//     }
-// }
+
+const packageManagerName = identifyPackageManager(true);
+console.log(packageManagerName);
+```
+
+You may also pass an explicit starting directory instead of relying on `process.cwd()`:
+
+```ts
+const packageManagerInfo = identifyPackageManager(false, "/path/inside/repository");
+```
+
+## Development
+
+This repository uses `npm`, not Yarn or pnpm.
+
+Useful commands:
+
+```bash
+npm test
+npm run build
+npm run verify
+```
+
+Commits are expected to use conventional commit messages. Local raw `git commit` is blocked by Husky on purpose; use the interactive helper instead:
+
+```bash
+npm run commit
+```
+
+That helper is intentionally a small local script instead of `commitizen` to avoid extra transitive maintenance and vulnerability surface.
+
+## Release workflow
+
+Releases are automated with `semantic-release` in GitHub Actions.
+
+- CI runs `npm ci` and `npm run verify`.
+- Releases run on pushes to `main` or `master`, plus manual workflow dispatch.
+- The workflow is designed for protected branches and does not rely on pushing version or changelog commits back to git.
+- Git tags, npm releases, and GitHub Releases are the release source of truth.
+- Because of that, the `package.json` version committed on `main` can lag behind the latest published version.
+- The release workflow is set up for npm Trusted Publishing via GitHub Actions OIDC. No long-lived `NPM_TOKEN` should be required once the npm package is configured for trusted publishing.
+- When migrating an already-published package to semantic-release, add a `vX.Y.Z` tag to the latest already-published commit before the first automated release so semantic-release has the correct baseline.
+- `npm run release:dry-run` intentionally skips npm and GitHub publishing plugins and uses the local checkout as the release repository so you can preview release calculation without GitHub push credentials or npm auth.
+
+You can preview the release process locally with:
+
+```bash
+npm run release:dry-run
 ```
